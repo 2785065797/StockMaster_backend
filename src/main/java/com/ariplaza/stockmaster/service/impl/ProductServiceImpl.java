@@ -4,6 +4,7 @@ import com.ariplaza.stockmaster.entity.Product;
 import com.ariplaza.stockmaster.mapper.ProductMapper;
 import com.ariplaza.stockmaster.service.IProductService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
  * @since 2025-12-26
  */
 @Service
+@Transactional
 public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> implements IProductService {
 
 }

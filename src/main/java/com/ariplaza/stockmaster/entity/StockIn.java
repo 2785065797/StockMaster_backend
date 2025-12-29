@@ -45,5 +45,7 @@ public class StockIn implements Serializable {
 
     private LocalDateTime deleteTime;
 
+    private Boolean isActive;
+
 
 }

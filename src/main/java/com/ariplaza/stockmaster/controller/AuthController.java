@@ -1,2 +1,9 @@
-package com.ariplaza.stockmaster.controller;public class AuthController {
+package com.ariplaza.stockmaster.controller;
+
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/auth")
+public class AuthController {
+
 }

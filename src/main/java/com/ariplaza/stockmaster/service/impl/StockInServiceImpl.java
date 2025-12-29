@@ -4,6 +4,7 @@ import com.ariplaza.stockmaster.entity.StockIn;
 import com.ariplaza.stockmaster.mapper.StockInMapper;
 import com.ariplaza.stockmaster.service.IStockInService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
  * @since 2025-12-26
  */
 @Service
+@Transactional
 public class StockInServiceImpl extends ServiceImpl<StockInMapper, StockIn> implements IStockInService {
 
 }

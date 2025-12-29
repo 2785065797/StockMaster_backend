@@ -4,6 +4,7 @@ import com.ariplaza.stockmaster.entity.Inventory;
 import com.ariplaza.stockmaster.mapper.InventoryMapper;
 import com.ariplaza.stockmaster.service.IInventoryService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
  * @since 2025-12-26
  */
 @Service
+@Transactional
 public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory> implements IInventoryService {
 
 }

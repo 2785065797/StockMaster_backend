@@ -45,5 +45,7 @@ public class StockOut implements Serializable {
 
     private LocalDateTime deleteTime;
 
+    private Boolean isActive;
+
 
 }

@@ -36,5 +36,6 @@ public class Category implements Serializable {
 
     private LocalDateTime updateTime;
 
+    private Boolean isActive;
 
 }
