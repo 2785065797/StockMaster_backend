@@ -12,7 +12,7 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 销售出库流水表
+ * 商品核心数据表
  * </p>
  *
  * @author yyj
@@ -21,27 +21,31 @@ import lombok.experimental.Accessors;
 @Getter
 @Setter
 @Accessors(chain = true)
-@TableName("stock_master_stock_out")
-public class StockOut implements Serializable {
+@TableName("stock_master_products")
+public class Products implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    private Long productId;
+    private String name;
 
-    private Integer quantity;
+    private Integer categoryId;
 
-    private String orderNo;
+    private BigDecimal costPrice;
 
-    private Long operator;
+    private BigDecimal preSalePrice;
+
+    private BigDecimal currentPrice;
+
+    private String unit;
+
+    private String imagePath;
 
     private LocalDateTime createTime;
 
-    private BigDecimal salePrice;
-
-    private BigDecimal totalSale;
+    private LocalDateTime lastUpdateTime;
 
     private LocalDateTime deleteTime;
 

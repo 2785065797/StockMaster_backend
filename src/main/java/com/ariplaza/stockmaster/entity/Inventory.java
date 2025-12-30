@@ -30,13 +30,15 @@ public class Inventory implements Serializable {
 
     private Long productId;
 
+    private Integer wareHouseId;
+
     private Integer stockCount;
 
     private Integer minStock;
 
-    private LocalDateTime lastUpdateTime;
+    private LocalDateTime createTime;
 
-    private Integer version;
+    private LocalDateTime lastUpdateTime;
 
     private LocalDateTime deleteTime;
 

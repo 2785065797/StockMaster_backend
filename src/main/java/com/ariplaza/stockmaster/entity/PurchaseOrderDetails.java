@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,33 +12,38 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 多级商品分类表
+ * 
  * </p>
  *
  * @author yyj
- * @since 2025-12-26
+ * @since 2025-12-30
  */
 @Getter
 @Setter
 @Accessors(chain = true)
-@TableName("stock_master_category")
-public class Category implements Serializable {
+@TableName("stock_master_purchase_order_details")
+public class PurchaseOrderDetails implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
 
-    private String name;
+    private Long orderId;
 
-    private Integer parentId;
+    private Long productId;
+
+    private Integer quantity;
+
+    private BigDecimal unitPrice;
 
     private LocalDateTime createTime;
 
     private LocalDateTime lastUpdateTime;
 
-    private LocalDateTime updateTime;
+    private LocalDateTime deleteTime;
 
     private Boolean isActive;
+
 
 }

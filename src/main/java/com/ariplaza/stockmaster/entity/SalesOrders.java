@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,36 +13,34 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 采购入库流水表
+ * 
  * </p>
  *
  * @author yyj
- * @since 2025-12-26
+ * @since 2025-12-30
  */
 @Getter
 @Setter
 @Accessors(chain = true)
-@TableName("stock_master_stock_in")
-public class StockIn implements Serializable {
+@TableName("stock_master_sales_orders")
+public class SalesOrders implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    private Long productId;
+    private String customerName;
 
-    private Integer quantity;
+    private LocalDate orderDate;
 
-    private String supplier;
+    private BigDecimal totalAmount;
 
-    private Long operator;
+    private String status;
 
     private LocalDateTime createTime;
 
-    private BigDecimal costPrice;
-
-    private BigDecimal totalCost;
+    private LocalDateTime lastUpdateTime;
 
     private LocalDateTime deleteTime;
 

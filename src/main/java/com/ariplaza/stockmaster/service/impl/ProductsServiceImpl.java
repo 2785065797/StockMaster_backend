@@ -1,10 +1,9 @@
 package com.ariplaza.stockmaster.service.impl;
 
 import com.ariplaza.stockmaster.entity.Products;
-import com.ariplaza.stockmaster.mapper.ProductMapper;
-import com.ariplaza.stockmaster.service.IProductService;
+import com.ariplaza.stockmaster.mapper.ProductsMapper;
+import com.ariplaza.stockmaster.service.IProductsService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,10 +12,9 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author yyj
- * @since 2025-12-26
+ * @since 2025-12-30
  */
 @Service
-@Transactional
-public class ProductServiceImpl extends ServiceImpl<ProductMapper, Products> implements IProductService {
+public class ProductsServiceImpl extends ServiceImpl<ProductsMapper, Products> implements IProductsService {
 
 }

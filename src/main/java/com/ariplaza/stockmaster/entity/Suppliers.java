@@ -11,33 +11,40 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 多级商品分类表
+ * 
  * </p>
  *
  * @author yyj
- * @since 2025-12-26
+ * @since 2025-12-30
  */
 @Getter
 @Setter
 @Accessors(chain = true)
-@TableName("stock_master_category")
-public class Category implements Serializable {
+@TableName("stock_master_suppliers")
+public class Suppliers implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
 
     private String name;
 
-    private Integer parentId;
+    private String contactPerson;
+
+    private String phone;
+
+    private String email;
+
+    private String address;
 
     private LocalDateTime createTime;
 
     private LocalDateTime lastUpdateTime;
 
-    private LocalDateTime updateTime;
+    private LocalDateTime deleteTime;
 
     private Boolean isActive;
+
 
 }

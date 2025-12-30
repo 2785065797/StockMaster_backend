@@ -5,14 +5,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- * 采购入库流水表 前端控制器
+ * 商品核心数据表 前端控制器
  * </p>
  *
  * @author yyj
- * @since 2025-12-26
+ * @since 2025-12-30
  */
 @RestController
-@RequestMapping("/stockIn")
-public class StockInController {
+@RequestMapping("/products")
+public class ProductsController {
 
 }

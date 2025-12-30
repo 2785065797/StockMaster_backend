@@ -5,14 +5,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- * 销售出库流水表 前端控制器
+ *  前端控制器
  * </p>
  *
  * @author yyj
- * @since 2025-12-26
+ * @since 2025-12-30
  */
 @RestController
-@RequestMapping("/stockOut")
-public class StockOutController {
+@RequestMapping("/salesOrderDetails")
+public class SalesOrderDetailsController {
 
 }
