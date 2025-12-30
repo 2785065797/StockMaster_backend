@@ -37,7 +37,7 @@ public class UserController {
         String username = credentials.get("username");
 
         // 验证用户
-        if (authService.isValidUser(credentials)){
+        if (!authService.isValidUser(credentials)){
             return ResponseUtil.error(400,"ユーザー名またはパスワードが間違いました");
         }
         // 生成JWT token (包含过期时间)
