@@ -3,6 +3,7 @@ package com.ariplaza.stockmaster.service.impl;
 import com.ariplaza.stockmaster.entity.User;
 import com.ariplaza.stockmaster.service.IAuthService;
 import com.ariplaza.stockmaster.service.IUserService;
+import com.ariplaza.stockmaster.util.RedisUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -11,7 +12,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,18 +20,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 @Service
 @Transactional
 public class AuthServiceImpl implements IAuthService {
 
-    private static final String TOKEN_PREFIX = "auth:token:"; // Redis key前缀
-
     private final long jwtExpiration; // 从application.properties注入（毫秒）
 
-    private final RedisTemplate<String, String> redisTemplate;
-
+    private final RedisUtil redisUtil;
     private final IUserService userService;
 
     private final SecretKey secretKey;
@@ -39,13 +35,13 @@ public class AuthServiceImpl implements IAuthService {
     private final PasswordEncoder passwordEncoder;
     public AuthServiceImpl(@Value("${jwt.secret-key}")String secret,
                            @Value("${jwt.expiration}")long jwtExpiration,
-                           RedisTemplate<String, String> redisTemplate,
                            @Autowired IUserService userService,
+                           @Autowired RedisUtil redisUtil,
                            PasswordEncoder passwordEncoder){
         this.jwtExpiration=jwtExpiration;
-        this.redisTemplate=redisTemplate;
         this.userService=userService;
         this.passwordEncoder=passwordEncoder;
+        this.redisUtil=redisUtil;
         this.secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
@@ -72,12 +68,7 @@ public class AuthServiceImpl implements IAuthService {
                 .compact();
 
         // 2. 存入Redis（使用正确的过期时间）
-        redisTemplate.opsForValue().set(
-                TOKEN_PREFIX + token,
-                username,
-                jwtExpiration, // 使用注入的过期时间
-                TimeUnit.MILLISECONDS
-        );
+        redisUtil.insertToken(token,username,jwtExpiration);
 
         return token;
     }
@@ -90,7 +81,7 @@ public class AuthServiceImpl implements IAuthService {
             Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
 
             // 检查Redis是否存在
-            return Boolean.TRUE.equals(redisTemplate.hasKey(TOKEN_PREFIX + token));
+            return redisUtil.equalsToken(token);
         } catch (ExpiredJwtException e) {
             return false; // 过期token自动失效
         } catch (Exception e) {
@@ -124,9 +115,9 @@ public class AuthServiceImpl implements IAuthService {
         return true;
     }
 
-    //获取token
+    //从Cookie获取token
     @Override
-    public String getToken(Cookie[] cookies) {
+    public String getTokenfromCookie(Cookie[] cookies) {
         String token = null;
         if (cookies != null) {
             for (Cookie cookie : cookies) {
@@ -142,32 +133,32 @@ public class AuthServiceImpl implements IAuthService {
     //更新token
     @Override
     public String updateToken(Cookie[] cookies) {
-        String token = getToken(cookies);
-        if (token == null&&!validateToken(token)) {
+        String token = getTokenfromCookie(cookies);
+        if (token == null||!validateToken(token)) {
             return null;
         }
 
         String username = getUsernameFromToken(token);
         String tokenNew = generateToken(username);
         //清理旧的token
-        String oldRedisKey = TOKEN_PREFIX + token;
-        if (Boolean.TRUE.equals(redisTemplate.delete(oldRedisKey))){
+        if(redisUtil.deleteTokenfromRedis(token)){
             return tokenNew;
+        }else {
+            return null;
         }
-        return null;
     }
 
     //从redis删除token
     @Override
     public Boolean deleteToken(Cookie[] cookies) {
-        String token = getToken(cookies);
+        String token = getTokenfromCookie(cookies);
         //验证token
-        if (token == null&&!validateToken(token)) {
+        if (token == null||!validateToken(token)) {
             return false;
         }
-        //清理旧的token
-        String oldRedisKey = TOKEN_PREFIX + token;
-        return Boolean.TRUE.equals(redisTemplate.delete(oldRedisKey));
+
+        //清理token
+        return redisUtil.deleteTokenfromRedis(token);
     }
 
     @Override

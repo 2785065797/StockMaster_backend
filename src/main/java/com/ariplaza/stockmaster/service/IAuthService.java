@@ -16,7 +16,7 @@ public interface IAuthService {
 
     boolean setCookie(String token, HttpServletResponse response);
 
-    String getToken(Cookie[] cookies);
+    String getTokenfromCookie(Cookie[] cookies);
 
     String updateToken(Cookie[] token);
 
