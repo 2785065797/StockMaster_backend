@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 /**
  * <p>
  * 库存系统用户表 服务实现类
@@ -32,7 +34,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
-    public boolean registerUser(String username, String email, String password) {
+    public boolean registerUser(Map<String, String> registration) {
+        String username = registration.get("username");
+        String email = registration.get("email");
+        String password = registration.get("password");
         if(getUserbyUsername(username)!=null){
             return false;
         }

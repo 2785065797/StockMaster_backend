@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -26,9 +27,6 @@ import java.util.concurrent.TimeUnit;
 public class AuthServiceImpl implements IAuthService {
 
     private static final String TOKEN_PREFIX = "auth:token:"; // Redis key前缀
-    //private static final int EXPIRATION_MINUTES = 24 * 60; // 24小时（分钟）
-
-    //private final String secret; // 从application.properties注入
 
     private final long jwtExpiration; // 从application.properties注入（毫秒）
 
@@ -53,7 +51,9 @@ public class AuthServiceImpl implements IAuthService {
 
     // 验证用户是否存在
     @Override
-    public boolean isValidUser(String username, String password) {
+    public boolean isValidUser(Map<String,String> credentials) {
+        String username = credentials.get("username");
+        String password = credentials.get("password");
         User user = userService.getUserbyUsername(username);
         return user != null && passwordEncoder.matches(password, user.getPassword());
     }
@@ -86,10 +86,10 @@ public class AuthServiceImpl implements IAuthService {
     @Override
     public boolean validateToken(String token) {
         try {
-            // 1. 验证JWT签名
+            // 验证JWT签名
             Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
 
-            // 2. 检查Redis是否存在
+            // 检查Redis是否存在
             return Boolean.TRUE.equals(redisTemplate.hasKey(TOKEN_PREFIX + token));
         } catch (ExpiredJwtException e) {
             return false; // 过期token自动失效
@@ -109,16 +109,22 @@ public class AuthServiceImpl implements IAuthService {
         }
     }
 
+    //设置token到Cookie
     @Override
-    public void setCookie(String token, HttpServletResponse response) {
-        // ✅ 重要：设置 HttpOnly Cookie
+    public boolean setCookie(String token, HttpServletResponse response) {
+        if(token==null){
+            return false;
+        }
+        // 设置 HttpOnly Cookie
         Cookie cookie = new Cookie("token", token);
-        cookie.setHttpOnly(true);      // 关键：防止 JS 访问
+        cookie.setHttpOnly(true);      // 防止 JS 访问
         cookie.setSecure(false);        // 仅 HTTPS 传输
         cookie.setPath("/");           // 所有路径可用
         response.addCookie(cookie);
+        return true;
     }
 
+    //获取token
     @Override
     public String getToken(Cookie[] cookies) {
         String token = null;
@@ -135,13 +141,33 @@ public class AuthServiceImpl implements IAuthService {
 
     //更新token
     @Override
-    public String updateToken(String token) {
+    public String updateToken(Cookie[] cookies) {
+        String token = getToken(cookies);
+        if (token == null&&!validateToken(token)) {
+            return null;
+        }
+
         String username = getUsernameFromToken(token);
         String tokenNew = generateToken(username);
         //清理旧的token
         String oldRedisKey = TOKEN_PREFIX + token;
-        redisTemplate.delete(oldRedisKey);
-        return tokenNew;
+        if (Boolean.TRUE.equals(redisTemplate.delete(oldRedisKey))){
+            return tokenNew;
+        }
+        return null;
+    }
+
+    //从redis删除token
+    @Override
+    public Boolean deleteToken(Cookie[] cookies) {
+        String token = getToken(cookies);
+        //验证token
+        if (token == null&&!validateToken(token)) {
+            return false;
+        }
+        //清理旧的token
+        String oldRedisKey = TOKEN_PREFIX + token;
+        return Boolean.TRUE.equals(redisTemplate.delete(oldRedisKey));
     }
 
     @Override

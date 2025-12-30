@@ -1,24 +1,26 @@
 package com.ariplaza.stockmaster.service;
 
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.util.Map;
+
 public interface IAuthService {
-    boolean isValidUser(String username, String password);
 
     String generateToken(String username);
-
-    //String getTokenFromHeader(HttpServletRequest request);
 
     boolean validateToken(String token);
 
     boolean sendPasswordResetEmail(String email);
     String getUsernameFromToken(String token);
 
-    void setCookie(String token, HttpServletResponse response);
+    boolean setCookie(String token, HttpServletResponse response);
 
     String getToken(Cookie[] cookies);
 
-    String updateToken(String token);
+    String updateToken(Cookie[] token);
+
+    Boolean deleteToken(Cookie[] cookies);
+
+    boolean isValidUser(Map<String, String> credentials);
 }
