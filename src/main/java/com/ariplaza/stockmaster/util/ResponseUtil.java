@@ -11,6 +11,13 @@ public class ResponseUtil {
                 "message",message
         ));
     }
+    public static <T> ResponseEntity<?> success(String message,T data){
+        return ResponseEntity.ok(Map.of(
+                "code",200,
+                "message",message,
+                "data",data
+        ));
+    }
     public static ResponseEntity<?> error(int code,String message){
         return ResponseEntity.status(code).body(Map.of(
                 "code", code,

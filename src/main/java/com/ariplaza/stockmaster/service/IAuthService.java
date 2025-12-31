@@ -7,7 +7,7 @@ import java.util.Map;
 
 public interface IAuthService {
 
-    String generateToken(String username);
+    String generateToken(String username,Long userId);
 
     boolean validateToken(String token);
 
@@ -18,9 +18,11 @@ public interface IAuthService {
 
     String getTokenfromCookie(Cookie[] cookies);
 
+    Long getUserIdFromToken(String token);
+
     String updateToken(Cookie[] token);
 
     Boolean deleteToken(Cookie[] cookies);
 
-    boolean isValidUser(Map<String, String> credentials);
+    Long isValidAndGetUserId(Map<String, String> credentials);
 }

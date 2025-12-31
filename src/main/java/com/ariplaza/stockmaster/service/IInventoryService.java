@@ -1,7 +1,10 @@
 package com.ariplaza.stockmaster.service;
 
 import com.ariplaza.stockmaster.entity.Inventory;
+import com.ariplaza.stockmaster.entity.dto.PageDto;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IInventoryService extends IService<Inventory> {
 
+    PageDto Refresh(int page, int pageSize, String searchQuery);
 }

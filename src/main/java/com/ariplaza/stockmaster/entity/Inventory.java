@@ -30,6 +30,8 @@ public class Inventory implements Serializable {
 
     private Long productId;
 
+    private String productName;
+
     private Integer wareHouseId;
 
     private Integer stockCount;

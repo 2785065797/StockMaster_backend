@@ -4,6 +4,7 @@ import com.ariplaza.stockmaster.entity.User;
 import com.ariplaza.stockmaster.service.IAuthService;
 import com.ariplaza.stockmaster.service.IUserService;
 import com.ariplaza.stockmaster.util.RedisUtil;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -47,21 +48,26 @@ public class AuthServiceImpl implements IAuthService {
 
     // 验证用户是否存在
     @Override
-    public boolean isValidUser(Map<String,String> credentials) {
+    public Long isValidAndGetUserId(Map<String,String> credentials) {
         String username = credentials.get("username");
         String password = credentials.get("password");
         User user = userService.getUserbyUsername(username);
-        return user != null && passwordEncoder.matches(password, user.getPassword());
+        if(user != null && passwordEncoder.matches(password, user.getPassword())){
+            return user.getId();
+        }else {
+            return null;
+        }
     }
 
     //创建token
     @Override
-    public String generateToken(String username) {
+    public String generateToken(String username,Long userId) {
         // 1. 生成JWT token
         String jti = UUID.randomUUID().toString();
         String token = Jwts.builder()
                 .setId(jti)
                 .setSubject(username)
+                .claim("user_id",userId)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .signWith(secretKey)
@@ -95,6 +101,20 @@ public class AuthServiceImpl implements IAuthService {
         try {
             return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token)
                     .getBody().getSubject();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    // 从token获取用户id
+    @Override
+    public Long getUserIdFromToken(String token) {
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(secretKey)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+            return ((Number) claims.get("user_id")).longValue(); // 安全转换
         } catch (Exception e) {
             return null;
         }
@@ -139,7 +159,8 @@ public class AuthServiceImpl implements IAuthService {
         }
 
         String username = getUsernameFromToken(token);
-        String tokenNew = generateToken(username);
+        Long userId=getUserIdFromToken(token);
+        String tokenNew = generateToken(username,userId);
         //清理旧的token
         if(redisUtil.deleteTokenfromRedis(token)){
             return tokenNew;

@@ -35,13 +35,13 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> credentials, HttpServletResponse res) {
         String username = credentials.get("username");
-
+        Long userId=authService.isValidAndGetUserId(credentials);
         // 验证用户
-        if (!authService.isValidUser(credentials)){
+        if (userId==null){
             return ResponseUtil.error(400,"ユーザー名またはパスワードが間違いました");
         }
         // 生成JWT token (包含过期时间)
-        String token = authService.generateToken(username);
+        String token = authService.generateToken(username,userId);
         //将token设置给Cookie
         if(authService.setCookie(token,res)){
             // 返回成功响应
