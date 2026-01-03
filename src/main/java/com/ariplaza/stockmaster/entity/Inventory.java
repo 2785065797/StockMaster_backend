@@ -32,7 +32,7 @@ public class Inventory implements Serializable {
 
     private String productName;
 
-    private Integer wareHouseId;
+    private String warehouseName;
 
     private Integer stockCount;
 

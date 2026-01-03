@@ -14,7 +14,7 @@ public class InventoryDto {
 
     public String productName;
 
-    public Integer wareHouseId;
+    public String warehouseName;
 
     public Integer stockCount;
 
@@ -33,7 +33,7 @@ public class InventoryDto {
         this.id=inventory.getId();
         this.productId=inventory.getProductId();
         this.productName=inventory.getProductName();
-        this.wareHouseId=inventory.getWareHouseId();
+        this.warehouseName=inventory.getWarehouseName();
         this.stockCount=inventory.getStockCount();
         this.minStock=inventory.getMinStock();
         this.createTime=inventory.getCreateTime();
