@@ -3,6 +3,8 @@ package com.ariplaza.stockmaster.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -25,6 +27,7 @@ import lombok.experimental.Accessors;
 @TableName("stock_master_purchase_orders")
 public class PurchaseOrders implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)

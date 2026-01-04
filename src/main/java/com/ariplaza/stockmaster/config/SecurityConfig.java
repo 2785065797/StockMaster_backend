@@ -30,7 +30,7 @@ public class SecurityConfig {
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/user/**", "/auth/**","/inventory/**","/products/**").permitAll()
+                        .requestMatchers("/user/**", "/auth/**","/inventory/**","/products/**","/category/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(AbstractHttpConfigurer::disable)

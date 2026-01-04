@@ -3,12 +3,15 @@ package com.ariplaza.stockmaster.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * <p>
@@ -24,6 +27,7 @@ import lombok.experimental.Accessors;
 @TableName("stock_master_products")
 public class Products implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
@@ -51,5 +55,17 @@ public class Products implements Serializable {
 
     private Boolean isActive;
 
+    private String description;
 
+    public Products(String name, Integer categoryId, String unit, BigDecimal currentPrice, BigDecimal preSalePrice, BigDecimal costPrice, Boolean isActive, String description,String imagePath){
+        this.name=name;
+        this.categoryId=categoryId;
+        this.unit=unit;
+        this.currentPrice=currentPrice;
+        this.preSalePrice=preSalePrice;
+        this.costPrice=costPrice;
+        this.isActive=isActive;
+        this.description=description;
+        this.imagePath=imagePath;
+    }
 }

@@ -2,6 +2,9 @@ package com.ariplaza.stockmaster.service;
 
 import com.ariplaza.stockmaster.entity.Products;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.math.BigDecimal;
 
 /**
  * <p>
@@ -13,4 +16,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IProductsService extends IService<Products> {
 
+    BigDecimal parsePrice(String costPriceStr);
+
+    boolean saveProduct(String name, Integer categoryId, String unit, BigDecimal currentPrice, BigDecimal preSalePrice, BigDecimal costPrice, Boolean isActive, String description, MultipartFile image);
 }

@@ -3,6 +3,8 @@ package com.ariplaza.stockmaster.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import lombok.Getter;
@@ -23,6 +25,7 @@ import lombok.experimental.Accessors;
 @TableName("stock_master_category")
 public class Category implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
@@ -30,14 +33,20 @@ public class Category implements Serializable {
 
     private String name;
 
-    private Integer parentId;
-
     private LocalDateTime createTime;
 
     private LocalDateTime lastUpdateTime;
 
-    private LocalDateTime updateTime;
+    private LocalDateTime deleteTime;
 
     private Boolean isActive;
 
+    private String description;
+
+    public Category(String name,Boolean isActive,String description){
+        this.name=name;
+        this.isActive=isActive;
+        this.description=description;
+    }
+    public Category(){}
 }
