@@ -131,6 +131,7 @@ public class AuthServiceImpl implements IAuthService {
         cookie.setHttpOnly(true);      // 防止 JS 访问
         cookie.setSecure(false);        // 仅 HTTPS 传输
         cookie.setPath("/");           // 所有路径可用
+        cookie.setMaxAge(7 * 24 * 3600000);
         response.addCookie(cookie);
         return true;
     }
