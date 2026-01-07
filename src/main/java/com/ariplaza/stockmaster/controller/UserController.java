@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,11 +53,16 @@ public class UserController {
         }
     }
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody Map<String, String> registration) {
+    public ResponseEntity<?> register(@Validated @RequestBody Map<String, String> registration) {
+        System.out.println("1.-----------username:"+registration.get("username")+"  email:"+registration.get("email")+"  password"+registration.get("password"));
         if (userService.registerUser(registration)) {
+            System.out.println("4.-----------username:"+registration.get("username")+"  email:"+registration.get("email")+"  password"+registration.get("password"));
             return ResponseUtil.success("登録成功、ログインしてください");
+
         } else {
+            System.out.println("5.-----------username:"+registration.get("username")+"  email:"+registration.get("email")+"  password"+registration.get("password"));
             return ResponseUtil.error(400,"ユーザーまたはメールは既に存在している");
+
         }
     }
     @PostMapping("/forgot-password")
