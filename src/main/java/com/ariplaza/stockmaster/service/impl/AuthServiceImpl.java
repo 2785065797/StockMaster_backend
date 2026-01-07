@@ -59,6 +59,11 @@ public class AuthServiceImpl implements IAuthService {
         }
     }
 
+    @Override
+    public boolean getPasswordEncoder(String password, String encodedPassword) {
+        return passwordEncoder.matches(password,encodedPassword);
+    }
+
     //创建token
     @Override
     public String generateToken(String username,Long userId) {

@@ -25,4 +25,6 @@ public interface IAuthService {
     Boolean deleteToken(Cookie[] cookies);
 
     Long isValidAndGetUserId(Map<String, String> credentials);
+
+    boolean getPasswordEncoder(String password,String encodedPassword);
 }
