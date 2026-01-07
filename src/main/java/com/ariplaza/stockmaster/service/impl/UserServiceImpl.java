@@ -36,9 +36,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         String username = registration.get("username");
         String email = registration.get("email");
         String password = registration.get("password");
+        System.out.println("2.-----------username:"+username+"  email:"+email+"  password"+password);
         if(getUserbyUsername(username)!=null){
             return false;
         }
+        System.out.println("3.-----------username:"+username+"  email:"+email+"  password"+password);
         User user = new User();
         user.setUsername(username);
         user.setEmail(email);
